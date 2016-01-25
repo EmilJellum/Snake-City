@@ -18,42 +18,40 @@ import java.util.Vector;
 
 public class Sdk {
 
-    private String address;
-    private int port;
-    private String serverRoot;
+    private String address; //Web service IP
+    private int port; //Web service port
+    private String serverRoot; //Web service roden
 
     public Sdk(){
         address = "localhost";
-        port = 13337;
+        port = 13867;
         serverRoot = "http://" + address + ":" + port + "/api/";
     }
 
-    public ArrayList<User> getUsers(){
-
-        Client client = Client.create();
-        WebResource webResource = client.resource(serverRoot + "users/");
-        ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
-
-        if (response.getStatus() == 200) {
-            String entity = response.getEntity(String.class);
-            return new Gson().fromJson(entity, new TypeToken<ArrayList<User>>(){}.getType());
-        }
-        return null;
-    }
-
+    /***
+     *  Returnerer en bruger fra serveren
+     * @param userId Id på den forespurgte bruger
+     * @return Returnerer instatieret User-objekt
+     */
+    //Returnerer en bruger fra serveren
     public User getUser(int userId){
 
-        Client client = Client.create();
-        WebResource webResource = client.resource(serverRoot + "users/" + userId);
-        ClientResponse response = webResource.type("application/json").get(ClientResponse.class);
+        Client client = Client.create(); // Socket oprettes
+        WebResource webResource = client.resource(serverRoot + "users/" + userId); //Requester resource
+        ClientResponse response = webResource.type("application/json").get(ClientResponse.class); //Behandler response
 
-        if (response.getStatus() == 200) {
-            String entity = response.getEntity(String.class);
-            return new Gson().fromJson(entity, User.class);
+        if (response.getStatus() == 200) { //Hvis OK
+            String entity = response.getEntity(String.class); //JSON udtrækkes fra response
+            return new Gson().fromJson(entity, User.class); //JSON instantieres
         }
         return null;
     }
 
+    /***
+     * Opretter en bruger på serveren
+     * @param user Bruger der skal oprettes på serveren
+     * @return Response besked fra server
+     */
     public String createUser(User user){
 
         String jsonUser = new Gson().toJson(user);
@@ -69,6 +67,12 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Logger en bruger ind
+     * @param username Brugerens username
+     * @param password Brugerens password
+     * @return Et instantieret brugerobjekt fra serveren
+     */
     public User login(String username, String password){
 
         String jsonLogin = "{'username': " + username + ", 'password': " + password + "}";
@@ -94,6 +98,11 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Henter et spil fra serveren
+     * @param gameId Id på det forespurgte spil
+     * @return Et instantieret Game-objekt
+     */
     public Game getGame(int gameId){
 
         Client client = Client.create();
@@ -107,6 +116,10 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Henter alle åbne spil fra serveren
+     * @return Et table med åbne spil (game-objekter) fra serveren
+     */
     public DefaultTableModel getGames(){
 
         Client client = Client.create();
@@ -147,6 +160,10 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Henter high score fra serveren
+     * @return En ArrayList af Score-objekter
+     */
     public ArrayList<Score> getScores(){
 
         Client client = Client.create();
@@ -160,6 +177,12 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Lader en bruger joine et åbent spil
+     * @param gameId Id på det pågældende spil
+     * @param user User-objektet for den indloggede bruger
+     * @return Response besked fra server
+     */
     public String joinGame(int gameId, User user){
 
         Game currentGame = getGame(gameId);
@@ -181,6 +204,12 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Lader en bruger starte/afvikle et spil
+     * @param gameId Det pågældende spils Id
+     * @param controls Den indloggede brugers styringshandlinger
+     * @return Et instantieret spilobjekt af det i kaldet afviklede spil
+     */
     public Game startGame(int gameId, String controls){
         Game currentGame = getGame(gameId);
         currentGame.getOpponent().setControls(controls);
@@ -198,6 +227,11 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Sletter et spil fra serveren
+     * @param gameId Det pågældende spils Id
+     * @return Response besked
+     */
     public String deleteGame(int gameId){
 
         Client client = Client.create();
@@ -210,6 +244,13 @@ public class Sdk {
         return null;
     }
 
+    /***
+     * Opretter et nyt spil på serveren
+     * @param game Det allerede instantierede Game-objekt
+     * @param user Den indloggede brugers User-objekt
+     * @param controls Den indloggede brugers styringshandlinger
+     * @return Response besked fra server
+     */
     public String createGame(Game game, User user, String controls){
 
         Game newGame = game;

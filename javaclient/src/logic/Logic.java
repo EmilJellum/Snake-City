@@ -12,20 +12,27 @@ import java.util.ArrayList;
 
 public class Logic {
 
-    private SnakeScreen screen;
-    private Sdk sdk;
-    private User currentUser;
+    private SnakeScreen screen; //Selve Framet
+    private Sdk sdk; //SDK
+    private User currentUser; //Den aktuelle bruger
 
     public Logic(){
         sdk = new Sdk();
-        screen = new SnakeScreen();
         currentUser = null;
-
-        screen.getLogin().addActionListener(new LoginActionListener());
-        screen.getMainMenu().addActionListener(new MainMenuActionListener());
-
     }
 
+    public void run(){
+        //Frame oprettes og ActionListeners injectes
+        screen = new SnakeScreen();
+        screen.getLogin().addActionListener(new LoginActionListener());
+        screen.getMainMenu().addActionListener(new MainMenuActionListener());
+    }
+
+    /***
+     * Logik til at fange tomme JTextField felter
+     * @param obj Liste af enhver type java-objekter
+     * @return Hvorvidt der findes et tomt JTextField-felt i listen
+     */
     public boolean userInfoMissing(Object[] obj){
 
         for (Object field : obj){
@@ -35,7 +42,9 @@ public class Logic {
         }
         return false;
     }
-
+    /***
+     * Logikken afvikles for den injectede actionlistener
+     */
     public class LoginActionListener implements ActionListener {
 
         @Override
@@ -87,7 +96,7 @@ public class Logic {
 
                                     if(sdk.createUser(usr) != null){
                                         JOptionPane.showMessageDialog(screen, "User: " + usr.getUsername() + " created!",
-                                                "Success", JOptionPane.ERROR_MESSAGE);
+                                                "Success", JOptionPane.INFORMATION_MESSAGE);
                                     }
                                 }else {
                                     JOptionPane.showMessageDialog(screen, "Password fields must match",
@@ -104,6 +113,9 @@ public class Logic {
 
     }
 
+    /***
+     * Logikken afvikles for den injectede actionlistener
+     */
     public class MainMenuActionListener implements ActionListener {
 
         @Override

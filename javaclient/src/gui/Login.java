@@ -65,6 +65,10 @@ public class Login extends JPanel {
         btnCreateUser.addActionListener(e);
     }
 
+    /***
+     * Clearer username og password-felterne på loginskærmen
+     */
+
     public void clearLogin(){
         txtUsername.setText("");
         txtPassword.setText("");
